@@ -1,4 +1,6 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { useState, useRef } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
 
@@ -9,7 +11,7 @@ export default function Login() {
   // method
   const checkEmail = (e) => {
     //값이 숫자인지 검사하는 정규식
-    const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])+@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])/
     if (regExp.test(e.target.value)) {
       inputRef.current.disabled = false;
 
@@ -26,6 +28,34 @@ export default function Login() {
     }
 
   }
+  // login api 연동
+  // 여기다가 link to 를 넣어야 컨트롤이 될거같은데
+  const sendLoginInfo = async() => {
+    const header = {
+      'Content-Type' : 'application/json'
+    }
+    // api 통신
+      await axios.post(
+        "https://pre-onboarding-selection-task.shop/auth/signin",
+        {
+          email : "qtqtew@asdaf.com",
+          password : "1234"
+        },{
+          header : header
+        }
+        )
+      .then((response) => {
+        // 성공시 jwt 토큰을 저장하고 
+        // todo로 이동
+          console.log(response);
+      })
+      .catch((Error) => {
+        console.log(Error);
+      })
+    
+  }
+  
+
   
   
   
@@ -79,7 +109,7 @@ export default function Login() {
               </div>
             </div>
 
-            
+            {/* 발생한 문제 : lick to가 disable 상태일떄도 작동해버림 */}
 
             <div>
               <button
@@ -87,11 +117,14 @@ export default function Login() {
                 className="group relative flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 data-testid="signin-button"
                 ref={inputRef}
-                > 
+                onClick={sendLoginInfo}
+                >
+                
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-red-500 group-hover:text-red-400" aria-hidden="true" />
                 </span>
                 Log in
+                
               </button>
 
               
@@ -100,10 +133,12 @@ export default function Login() {
                 data-testid="signup-button"
                 className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
+                <Link to = "/signup">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
                 Sign in
+                </Link>
               </button>
             </div>
           </form>
