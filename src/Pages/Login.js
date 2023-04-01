@@ -1,6 +1,34 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { useState, useRef } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
+
 export default function Login() {
+  // state
+  // let [emailCheck, setEmailCheck] = useState(false);
+  const inputRef = useRef(null);
+  // method
+  const checkEmail = (e) => {
+    //값이 숫자인지 검사하는 정규식
+    const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    if (regExp.test(e.target.value)) {
+      inputRef.current.disabled = false;
+
+    }else {
+      inputRef.current.disabled = true;
+    }
+  };
+  const checkPassword = (e) => {
+    const length = e.target.value.length;
+    if (length >= 8) {
+      inputRef.current.disabled = false;
+    }else {
+      inputRef.current.disabled = true;
+    }
+
+  }
+  
+  
+  
   return (
     <>
       
@@ -21,14 +49,15 @@ export default function Login() {
                   Email address
                 </label>
                 <input
+                // 따로 유효성 검사를 위해 text로 설정
                   id="email-address"
                   name="email"
-                  type="email"
-                  autoComplete="email"
+                  type="text"
                   data-testid="email-input"
                   required
                   className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
+                  onChange={checkEmail}
                 />
               </div>
               <div>
@@ -44,6 +73,7 @@ export default function Login() {
                   required
                   className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Password"
+                  onChange={checkPassword}
                 />
               </div>
             </div>
@@ -55,7 +85,8 @@ export default function Login() {
                 type="submit"
                 className="group relative flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 data-testid="signin-button"
-              >
+                ref={inputRef}
+                > 
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-red-500 group-hover:text-red-400" aria-hidden="true" />
                 </span>
