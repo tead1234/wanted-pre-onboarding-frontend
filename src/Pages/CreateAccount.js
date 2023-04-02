@@ -1,5 +1,5 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useRef } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
@@ -35,30 +35,39 @@ export default function CreateAccount() {
   }
   // login api 연동
   // 여기다가 link to 를 넣어야 컨트롤이 될거같은데
-  const sendSignUpInfo = async() => {
-    const header = {
-      'Content-Type' : 'application/json'
-    }
+  const sendSignUpInfo = async(e) => {
+    e.preventDefault();
     
-    // api 통신
-      await axios.post(
-        "https://pre-onboarding-selection-task.shop/auth/signup",
-        {
-          email : emailInfo,
-          password : passwordInfo
-        },{
-          header : header
-        }
-        )
-      .then((response) => {
-        // 성공시 jwt 토큰을 저장하고 
-        // todo로 이동
-          console.log(response);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      })
-    
+    if(inputRef.current.disabled){
+      alert("입력정보가 잘못됐습니다.");
+    }else{
+      const header = {
+        'Content-Type' : 'application/json'
+      }
+      
+      // api 통신
+        await axios.post(
+          "https://pre-onboarding-selection-task.shop/auth/signup",
+          {
+            email : emailInfo,
+            password : passwordInfo
+          },{
+            header : header
+          }
+          )
+        .then((response) => {
+          // 성공시 jwt 토큰을 저장하고 
+          // todo로 이동
+            console.log(response);
+            if (response.status === 201) {
+              <Navigate to ="/todo"></Navigate>
+            }
+        })
+        .catch((Error) => {
+          console.log(Error);
+          <Navigate to= "/signup"></Navigate>
+        })
+      }  
   }
   
 
@@ -123,12 +132,10 @@ export default function CreateAccount() {
                 ref = {inputRef}
                 onClick={sendSignUpInfo}
               >
-                <Link to = "/signin">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
                 Sign up
-                </Link>
               </button>
             </div>
           </form>
