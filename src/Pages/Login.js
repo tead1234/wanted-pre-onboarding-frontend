@@ -1,19 +1,23 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
 
 export default function Login() {
   // state
   // let [emailCheck, setEmailCheck] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef();
+  const movePage = useNavigate();
+  let [emailInfo, setEmailInfo] = useState("");
+  let [passwordInfo, setPasswordInfo] = useState("");
   // method
   const checkEmail = (e) => {
     //값이 숫자인지 검사하는 정규식
     const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])+@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])/
     if (regExp.test(e.target.value)) {
       inputRef.current.disabled = false;
+      setEmailInfo(e.target.value);
 
     }else {
       inputRef.current.disabled = true;
@@ -23,14 +27,21 @@ export default function Login() {
     const length = e.target.value.length;
     if (length >= 8) {
       inputRef.current.disabled = false;
+      setPasswordInfo(e.target.value);
     }else {
       inputRef.current.disabled = true;
     }
 
   }
+  // 페이지 이동 함수
+  
+
   // login api 연동
   // 여기다가 link to 를 넣어야 컨트롤이 될거같은데
-  const sendLoginInfo = async() => {
+  const sendLoginInfo = async(e) => {
+    // 새로고침 방지
+    e.preventDefault();
+    
     const header = {
       'Content-Type' : 'application/json'
     }
@@ -38,8 +49,8 @@ export default function Login() {
       await axios.post(
         "https://pre-onboarding-selection-task.shop/auth/signin",
         {
-          email : "qtqtew@asdaf.com",
-          password : "1234"
+          email : emailInfo,
+          password : passwordInfo
         },{
           header : header
         }
@@ -47,7 +58,9 @@ export default function Login() {
       .then((response) => {
         // 성공시 jwt 토큰을 저장하고 
         // todo로 이동
-          console.log(response);
+        // 저장확인
+          localStorage.setItem("jwt", response.data.access_token);
+          console.log(localStorage.getItem("jwt"));
       })
       .catch((Error) => {
         console.log(Error);
@@ -109,7 +122,7 @@ export default function Login() {
               </div>
             </div>
 
-            {/* 발생한 문제 : lick to가 disable 상태일떄도 작동해버림 */}
+           
 
             <div>
               <button
@@ -127,17 +140,20 @@ export default function Login() {
                 
               </button>
 
-              
+            <div>
+            {/* 페이지 오픈후 바로 회원가입을 누르면 발생하는 에러 */}
+            </div>
               <button
                 type="submit"
                 data-testid="signup-button"
                 className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                // onClick={useNavigate('/signup')}
               >
                 <Link to = "/signup">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
-                Sign in
+                  회원가입
                 </Link>
               </button>
             </div>

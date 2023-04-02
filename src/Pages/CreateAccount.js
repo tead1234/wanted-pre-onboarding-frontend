@@ -1,5 +1,5 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useRef } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
@@ -8,6 +8,7 @@ export default function CreateAccount() {
   // state
   // let [emailCheck, setEmailCheck] = useState(false);
   const inputRef = useRef(false);
+  const movePage = useNavigate();
   let [emailInfo, setEmailInfo] = useState("");
   let [passwordInfo, setPasswordInfo] = useState("");
   // 회원 가입 정보를 저장하는 state를 만들면
@@ -60,12 +61,12 @@ export default function CreateAccount() {
           // todo로 이동
             console.log(response);
             if (response.status === 201) {
-              <Navigate to ="/todo"></Navigate>
+              movePage('/todo');
             }
         })
         .catch((Error) => {
           console.log(Error);
-          <Navigate to= "/signup"></Navigate>
+          movePage('/signup');
         })
       }  
   }
