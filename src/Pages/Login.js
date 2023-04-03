@@ -67,6 +67,13 @@ export default function Login() {
       })
     
   }
+  // 로그인시 jwt를 받았다면 바로 todo로 이동하도록 구현
+  // 고민 1 > 따로 state를 활용해서 저장해놓는게 좋을까 아니면 매번 로그인시마다 체크하도록 할까? 일단은 후자로?
+  useEffect(() => {
+    if (localStorage.getItem("jwt")){
+      movePage("/todo");
+    }
+  },[])
   
 
   

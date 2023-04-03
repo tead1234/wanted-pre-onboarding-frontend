@@ -1,7 +1,7 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
 
 export default function CreateAccount() {
@@ -21,6 +21,7 @@ export default function CreateAccount() {
       setEmailInfo(e.target.value);
     }else {
       inputRef.current.disabled = true;
+      console.log("아이디를 다시 적어주세요");
     }
   };
   const checkPassword = (e) => {
@@ -70,7 +71,11 @@ export default function CreateAccount() {
         })
       }  
   }
-  
+  useEffect(() => {
+    if (localStorage.getItem("jwt")){
+      movePage("/todo");
+    }
+  },[])
 
   
   
