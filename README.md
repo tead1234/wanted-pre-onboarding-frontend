@@ -7,14 +7,17 @@
   <br>
 </p>
 
-목차
-
 ## 프로젝트 소개
 
 <p align="justify">
 프론트엔드 개발자로 전직을 위한 프로젝트
 </p>
 <br>
+
+## 사용방법
+### 1. git clone으로 현재 프로젝트를 local에 저장
+### 2. npm install
+### 3. npm start run으로 실행
 
 ## 기술 스택
 
