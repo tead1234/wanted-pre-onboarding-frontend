@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CreateAccount from './Pages/CreateAccount';
@@ -8,7 +8,7 @@ function App() {
   // routers
 
   return (
-    <div className="App">
+    <div className="App" style={{backgroundImage : "url(/bg1.jpg)"}}>
         <BrowserRouter>
 				<Routes>
 					<Route path="/signup" element={<CreateAccount></CreateAccount>}></Route>
