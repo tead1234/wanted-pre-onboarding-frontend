@@ -49,12 +49,12 @@ export default function CreateAccount() {
       
       // api 통신
         await axios.post(
-          "https://pre-onboarding-selection-task.shop/auth/signup",
+          "https://www.pre-onboarding-selection-task.shop/auth/signup",
           {
             email : emailInfo,
             password : passwordInfo
           },{
-            header : header
+            headers : header
           }
           )
         .then((response) => {
@@ -62,7 +62,7 @@ export default function CreateAccount() {
           // todo로 이동
             console.log(response);
             if (response.status === 201) {
-              movePage('/todo');
+              movePage('/signin');
             }
         })
         .catch((Error) => {

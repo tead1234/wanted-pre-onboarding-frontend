@@ -1,64 +1,182 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+
+import ModifyText from "../Components/ModifyText";
+import axios from "axios";
+import { click } from "@testing-library/user-event/dist/click";
 
 export default function Todo() {
   let [todoList, setTodoList] = useState([]);
   let [checkComplete, setCheckComplete] = useState([]);
+  const movePage = useNavigate();
+  const token = localStorage.getItem('jwt');
   // id 값을 주기 위한 state
   let [id , setId] = useState(0);
   let inputRef = useRef(null);
+  let [modify, setModify] = useState(false);
 
-  const todo_make = (e) => {
-    e.preventDefault();
-    const newTodo = {id : id, value : inputRef.current.value};
-    setId(id += 1);
-    console.log(todoList);
-    setTodoList([...todoList, newTodo]);
-    inputRef.current.value = "";
-  };
 
-  const checkbox_clicked = (id) => {
-    // TODO: 체크박스 클릭 이벤트 핸들러 함수 구현
-    // 바로 체크박스로 구현하는건 힘들고 별도의 state를 활용해서 개발해야될거같음
-    // checkbox를 클릭할때마다 index값을 complete에 저장하고 
-    // 저장된 인덱스들은 취소선 css 값 주기
-    // state에서 id값을 가진애를 삭제
-    // undone도 가능하도록 구현
-    if(checkComplete.includes(id)){
-        let renew = checkComplete.filter(ch => ch !== id);
-        setCheckComplete(renew);
-    }else{
-        setCheckComplete([...checkComplete, id]);
-    }
-
-    
-  };
-  // 삭제 버튼을 누르면 해당 li의 아이디를 state에서 지우면 됨
-const check = (id) => {
-    let renew = [];
-    todoList.map((todo) => {
-        if(todo.id !== id){
-            renew.push(todo);
+  // 생성 todo
+  const todo_make = async (e) => {
+  
+      e.preventDefault();
+      
+      
+        const header = {
+          'Content-Type' : 'application/json',
+          'Authorization' : `Bearer ${token}`
         }
-    });
-    setTodoList(renew);
+        
+          await axios.post(
+            "https://www.pre-onboarding-selection-task.shop/todos",
+            {
+                todo : inputRef.current.value
+            },{
+              headers : header
+            }
+            )
+          .then((response) => {
+            // 성공시 jwt 토큰을 저장하고 
+            // todo로 이동
+              if (response.status === 201) {
+                console.log(response.data);
+                getTodo();
+                // console.log(response.data.body);
+              }
+          })
+          .catch((Error) => {
+            console.log(Error);
+          })
+    }
+const getTodo = () => {
+  const headers = {
+    'Authorization' : `Bearer ${token}`
+  }
+  axios.get("https://www.pre-onboarding-selection-task.shop/todos",
+    {
+      headers : headers
+    }
+  )
+  .then((response) => {
+    setTodoList(response.data);
+    console.log(todoList);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 }
-// 수정 버튼
-const modifyCheck = (id) =>{
-    // 수정창을 띄우고
-    // 내용을 입력후 확인 버튼을 누르면 
-    // checkC todolist를 수정하면 ok 
-    // checkbox 클릭 유무는 어차피 id로 관리 되고 있어서 상관없음
-    
+// 단순히 체크박스를 클릭하는 것과 아예 수정하는 것을 분리해야함
+const modifyCheck = async (id) => {
+    // id 로 todo를 가져오고 
+// 전역으로 쓸수있는 state를 만들어서 공유되도록하는게 좋으려나?
+    // setModify(true);
+    // const header = {
+    //       'Content-Type' : 'application/json',
+    //       'Authorization' : `Bearer ${token}`
+    //     }
+        
+    //       await axios.put(
+    //         `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
+    //         {
+    //           // 수정창에서 가져온 string
+    //             todo: string,
+    //             isCompleted: boolean
+    //         },{
+    //           headers : header
+    //         }
+    //         )
+    //       .then((response) => {
+    //         // 성공시 jwt 토큰을 저장하고 
+    //         // todo로 이동
+    //           if (response.status === 201) {
+    //             console.log(response.data);
+    //             getTodo();
+    //             // console.log(response.data.body);
+    //           }
+    //       })
+    //       .catch((Error) => {
+    //         console.log(Error);
+    //       })
 }
+const checkbox_clicked =  async (id) => {
+    // todoList에서 string만 가져오기
+    const content = JSON.stringify(todoList.filter(todo => todo.id === id).pop());
+    console.log("content", content, typeof content);
+    let clicked = false;
+    todoList.map((todo) => {
+      if(todo.id === id){
+        clicked = !todo.isCompleted;
+        console.log(clicked);
+      }
+    })
+  
+    const header = {
+          'Content-Type' : 'application/json',
+          'Authorization' : `Bearer ${token}`
+        }
+        
+          await axios.put(
+            `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
+            {
+              // 수정창에서 가져온 string
+                todo: content.todo,
+                isCompleted: clicked
+            },{
+              headers : header
+            }
+            )
+          .then((response) => {
+            // 성공시 jwt 토큰을 저장하고 
+            // todo로 이동
+              if (response.status === 201) {
+                console.log(response.data);
+                getTodo();
+              }
+          })
+          .catch((Error) => {
+            console.log(Error);
+          })
+}
+const deleteTodo = (id) => {
+  const header = {
+    'Authorization' : `Bearer ${token}`
+  };
+  axios.delete(
+    `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
+    {
+      headers : header
+    }
+    )
+    .then((response) => {
+      getTodo();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
+
+
+// token이 ㅇ벗다면 리다이렉트
+useEffect(() => {
+  if (!localStorage.getItem("jwt")){
+    movePage("/signin");
+  }
+},[])
 
   return (
-    <div>
+    <div className="z-30">
+      {/* 여기에 수정창을 넣어놓고 state에 따라 나타나거나 나타나지 않도록 구현 */}
+      {
+        modify ? 
+        <ModifyText></ModifyText> :
+        null
+      }
       <div className="Title-box">
         <h1>오늘은 뭘 해야할까??</h1>
       </div>
       <div className="make-todo">
-        <input type="text" ref={inputRef} />
-        <button onClick={todo_make}>등록</button>
+        <input type="text" ref={inputRef} data-testid="new-todo-input" />
+        <button onClick={(e) => todo_make(e)} data-testid="new-todo-add-button">등록</button>
       </div>
       <ul>
         {/* 여기서 인덱스를 쓰면 나중에 꼬일 수 있음 */}
@@ -73,13 +191,13 @@ const modifyCheck = (id) =>{
               
             />
             {
-                checkComplete.includes(todo.id)? 
-                <label style={{textDecoration : "line-through"}} htmlFor={`todo-item-${todo.id}`}>{todo.value}</label> :
-                <label htmlFor={`todo-item-${todo.id}`}>{todo.value}</label>
+                todo.idCompleted ? 
+                <label style={{textDecoration : "line-through"}} htmlFor={`todo-item-${todo.id}`}>{todo.todo}</label> :
+                <label htmlFor={`todo-item-${todo.id}`}>{todo.todo}</label>
 
             }
-            <button onClick={() => check(todo.id)}>삭제</button>
-            <button onClick={() => check(todo.id)}>수정</button>
+            <button onClick={() => deleteTodo(todo.id)}>삭제</button>
+            <button onClick={() => modifyCheck(todo.id)}>수정</button>
           </li>
         ))}
       </ul>

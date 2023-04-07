@@ -47,12 +47,12 @@ export default function Login() {
     }
     // api 통신
       await axios.post(
-        "https://pre-onboarding-selection-task.shop/auth/signin",
+        "https://www.pre-onboarding-selection-task.shop/auth/signin",
         {
           email : emailInfo,
           password : passwordInfo
         },{
-          header : header
+          headers : header
         }
         )
       .then((response) => {
@@ -60,10 +60,11 @@ export default function Login() {
         // todo로 이동
         // 저장확인
           localStorage.setItem("jwt", response.data.access_token);
-          console.log(localStorage.getItem("jwt"));
+          movePage('/todo');
       })
       .catch((Error) => {
         console.log(Error);
+        movePage('/signin');
       })
     
   }
@@ -154,14 +155,12 @@ export default function Login() {
                 type="submit"
                 data-testid="signup-button"
                 className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                // onClick={useNavigate('/signup')}
+                onClick={() => movePage('/signup')}
               >
-                <Link to = "/signup">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
                   회원가입
-                </Link>
               </button>
             </div>
           </form>
