@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-
+import { useObserver } from 'mobx-react';
 import ModifyText from "../Components/ModifyText";
 import axios from "axios";
-import { click } from "@testing-library/user-event/dist/click";
+import ModifyModeStore from "../Stores/ModifyModeStore";
+import ModifyIdStore from "../Stores/ModifyIdStore";
 
 export default function Todo() {
   let [todoList, setTodoList] = useState([]);
@@ -13,7 +14,6 @@ export default function Todo() {
   // id 값을 주기 위한 state
   let [id , setId] = useState(0);
   let inputRef = useRef(null);
-  let [modify, setModify] = useState(false);
 
 
   // 생성 todo
@@ -59,56 +59,30 @@ const getTodo = () => {
   )
   .then((response) => {
     setTodoList(response.data);
-    console.log(todoList);
+    
   })
   .catch((err) => {
     console.log(err);
   });
 }
 // 단순히 체크박스를 클릭하는 것과 아예 수정하는 것을 분리해야함
-const modifyCheck = async (id) => {
-    // id 로 todo를 가져오고 
-// 전역으로 쓸수있는 state를 만들어서 공유되도록하는게 좋으려나?
-    // setModify(true);
-    // const header = {
-    //       'Content-Type' : 'application/json',
-    //       'Authorization' : `Bearer ${token}`
-    //     }
-        
-    //       await axios.put(
-    //         `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
-    //         {
-    //           // 수정창에서 가져온 string
-    //             todo: string,
-    //             isCompleted: boolean
-    //         },{
-    //           headers : header
-    //         }
-    //         )
-    //       .then((response) => {
-    //         // 성공시 jwt 토큰을 저장하고 
-    //         // todo로 이동
-    //           if (response.status === 201) {
-    //             console.log(response.data);
-    //             getTodo();
-    //             // console.log(response.data.body);
-    //           }
-    //       })
-    //       .catch((Error) => {
-    //         console.log(Error);
-    //       })
+const modifyCheck = (id) => {
+  // 수정모드로 변경후 
+  ModifyModeStore.activeAction();
+  ModifyIdStore.modifyAction(id);
 }
 const checkbox_clicked =  async (id) => {
     // todoList에서 string만 가져오기
-    const content = JSON.stringify(todoList.filter(todo => todo.id === id).pop());
-    console.log("content", content, typeof content);
+    const todoItem = todoList.find(todo => todo.id === id);
+    console.log(todoItem.todo);
     let clicked = false;
-    todoList.map((todo) => {
-      if(todo.id === id){
-        clicked = !todo.isCompleted;
+    // map 과 forEach의 차이를 고민해보자 
+    todoList.forEach(todo => {
+      if (todo.id === id) {
+        let clicked = !todo.isCompleted;
         console.log(clicked);
       }
-    })
+    });
   
     const header = {
           'Content-Type' : 'application/json',
@@ -119,7 +93,7 @@ const checkbox_clicked =  async (id) => {
             `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
             {
               // 수정창에서 가져온 string
-                todo: content.todo,
+                todo: todoItem.todo,
                 isCompleted: clicked
             },{
               headers : header
@@ -128,10 +102,9 @@ const checkbox_clicked =  async (id) => {
           .then((response) => {
             // 성공시 jwt 토큰을 저장하고 
             // todo로 이동
-              if (response.status === 201) {
-                console.log(response.data);
+             
                 getTodo();
-              }
+              
           })
           .catch((Error) => {
             console.log(Error);
@@ -160,14 +133,18 @@ const deleteTodo = (id) => {
 useEffect(() => {
   if (!localStorage.getItem("jwt")){
     movePage("/signin");
+    // getTodo();
   }
 },[])
+useEffect(() => {
+  getTodo();
+})
 
-  return (
-    <div className="z-30">
+  return useObserver(() => (
+    <div className="z-30" style={{backgroundImage : "url(/bg1.jpg)"}}>
       {/* 여기에 수정창을 넣어놓고 state에 따라 나타나거나 나타나지 않도록 구현 */}
       {
-        modify ? 
+        ModifyModeStore.modify ? 
         <ModifyText></ModifyText> :
         null
       }
@@ -202,5 +179,5 @@ useEffect(() => {
         ))}
       </ul>
     </div>
-  );
+  ));
 }
