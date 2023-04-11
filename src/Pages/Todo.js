@@ -5,6 +5,10 @@ import ModifyText from "../Components/ModifyText";
 import axios from "axios";
 import ModifyModeStore from "../Stores/ModifyModeStore";
 import ModifyIdStore from "../Stores/ModifyIdStore";
+import logo from "../Assets/imgs/logo.png"
+import bg1 from "../bg1.jpg"
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 export default function Todo() {
   let [todoList, setTodoList] = useState([]);
@@ -133,7 +137,6 @@ const deleteTodo = (id) => {
 useEffect(() => {
   if (!localStorage.getItem("jwt")){
     movePage("/signin");
-    // getTodo();
   }
 },[])
 useEffect(() => {
@@ -141,21 +144,26 @@ useEffect(() => {
 })
 
   return useObserver(() => (
-    <div className="z-30" style={{backgroundImage : "url(/bg1.jpg)"}}>
-      {/* 여기에 수정창을 넣어놓고 state에 따라 나타나거나 나타나지 않도록 구현 */}
+    <div className="z-30 h-screen">
       {
         ModifyModeStore.modify ? 
         <ModifyText></ModifyText> :
         null
       }
+      
+      {/* 여기에 수정창을 넣어놓고 state에 따라 나타나거나 나타나지 않도록 구현 */}
+      
+      {/* 아래것을 감싸는 컨테이너 */}
+      <div className="h-auto min-h-full">
+      <Header></Header>
       <div className="Title-box">
-        <h1>오늘은 뭘 해야할까??</h1>
+          <img src= {logo} style={{display: "block",  margin: "0px auto"}}></img>
       </div>
-      <div className="make-todo">
-        <input type="text" ref={inputRef} data-testid="new-todo-input" />
-        <button onClick={(e) => todo_make(e)} data-testid="new-todo-add-button">등록</button>
+      <div className="h-40px w-full">
+        <input className="border-solid border-2 rounded-2xl border-sky-500" type="text" ref={inputRef} data-testid="new-todo-input" />
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={(e) => todo_make(e)} data-testid="new-todo-add-button">등록</button>
       </div>
-      <ul>
+      <ul className="h-30">
         {/* 여기서 인덱스를 쓰면 나중에 꼬일 수 있음 */}
         {/* 고유값을 부여해서 만드는게 나을거같음 */}
         {/* input의 onChange가 과연 언제 발생할까?? */}
@@ -178,6 +186,10 @@ useEffect(() => {
           </li>
         ))}
       </ul>
+
+
+      </div>
+            <Footer></Footer>
     </div>
   ));
 }

@@ -2,6 +2,7 @@ import { LockClosedIcon } from '@heroicons/react/20/solid'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
+import Header from '../Components/Header';
 // state 하나 만들어서 정규식을 패스하면 true로 바꿔서 disabled 컨트롤하면됨
 
 export default function Login() {
@@ -83,6 +84,7 @@ export default function Login() {
   return (
     <>
       
+      <Header></Header>
       <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>

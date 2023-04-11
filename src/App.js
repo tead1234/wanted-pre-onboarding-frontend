@@ -8,13 +8,13 @@ function App() {
   // routers
 
   return (
-    <div className="App" style={{backgroundImage : "url(/bg1.jpg)"}}>
+    <div className="App">
         <BrowserRouter>
 				<Routes>
 					<Route path="/signup" element={<CreateAccount></CreateAccount>}></Route>
 					<Route path="/signin" element={<Login></Login>}></Route>
 					<Route path="/todo" element={<Todo></Todo>}></Route>
-					<Route path="*" element={<></>}></Route>
+					<Route path="*" element={<>잘못된 주소입니다.</>}></Route>
 				</Routes>
 			</BrowserRouter>
     </div>
