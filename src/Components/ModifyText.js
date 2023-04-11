@@ -7,6 +7,7 @@ export default function ModifyText(){
     let inputRef = useRef(null);
     const token = localStorage.getItem('jwt');
     let id = ModifyIdStore.id;
+    let check = ModifyIdStore.isChecked;
     const clear = () => {
         ModifyModeStore.deactiveAction();
     }
@@ -21,13 +22,13 @@ export default function ModifyText(){
           {
             // 수정창에서 가져온 string
               todo: inputRef.current.value,
-              isCompleted: false
+              isCompleted: check
           },{
             headers : header
           }
           )
         .then((response) => {
-            
+            ModifyIdStore.clearAction();
             ModifyModeStore.deactiveAction();
         })
         .catch((Error) => {
@@ -36,14 +37,14 @@ export default function ModifyText(){
     }
     return useObserver(() => (
         // backgrpund
-        <div className="w-screen h-screen bg-gradient-to-t from-sky-500 to-indigo-500 z-40">
+        <div className="w-screen h-screen  bg-black bg-opacity-60 z-50 fixed">
             {/* 알림창 */}
-            <div className="z-99">
+            <div className="z-99 bg-white rounded-lg shadow-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <h1>알림창입니다.</h1>
-                <input ref= {inputRef}></input>
-            </div>
+                <input className='border-solid border-2 rounded-2xl border-sky-400' ref= {inputRef}></input>
             <button onClick={() => modifyReq(inputRef.current.value)}>완료</button>
             <button onClick={() => clear()}>취소</button>
+            </div>
         </div>
     ));
 }

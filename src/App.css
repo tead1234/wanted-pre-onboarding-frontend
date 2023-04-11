@@ -1,8 +1,11 @@
 .App {
   text-align: center;
-  background-image : url("bg1.jpg"));
+  
 }
-
+@font-face{
+  font-family : "shinb7";
+  src : url("./Assets/fonts/SSShinb7.ttf")
+}
 
 
 .App-link {
