@@ -9,6 +9,7 @@ export default function ModifyText(){
     let id = ModifyIdStore.id;
     let check = ModifyIdStore.isChecked;
     const clear = () => {
+        ModifyIdStore.clearAction();
         ModifyModeStore.deactiveAction();
     }
     const modifyReq = () => {
