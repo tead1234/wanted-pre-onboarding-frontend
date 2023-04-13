@@ -40,10 +40,10 @@ export default function ModifyText(){
         <div className="w-screen h-screen  bg-black bg-opacity-60 z-50 fixed">
             {/* 알림창 */}
             <div className="z-99 bg-white rounded-lg shadow-md p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <h1>알림창입니다.</h1>
-                <input className='border-solid border-2 rounded-2xl border-sky-400' ref= {inputRef}></input>
-            <button onClick={() => modifyReq(inputRef.current.value)}>완료</button>
-            <button onClick={() => clear()}>취소</button>
+                <h1>수정창입니다.</h1>
+                <input className='border-solid border-2 rounded-2xl border-sky-400' ref= {inputRef} data-testid="modify-input"></input>
+            <button data-testid="submit-button" onClick={() => modifyReq(inputRef.current.value)}>완료</button>
+            <button data-testid="cancel-button" onClick={() => clear()}>취소</button>
             </div>
         </div>
     ));

@@ -103,6 +103,7 @@ export default function CreateAccount() {
                 <input
                 // 따로 유효성 검사를 위해 text로 설정
                   id="email-address"
+                  data-testid="email-input" 
                   name="email"
                   type="text"
                   required
@@ -120,6 +121,7 @@ export default function CreateAccount() {
                   id="password"
                   name="password"
                   type="password"
+                  data-testid="password-input"
                   autoComplete="current-password"
                   required
                   className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

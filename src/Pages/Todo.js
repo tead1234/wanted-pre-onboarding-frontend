@@ -184,8 +184,8 @@ useEffect(() => {
                 <label style={{marginRight : "20px"}} htmlFor={`todo-item-${todo.id}`}>{todo.todo}</label>
 
             }
-            <button className="bg-red-300 hover:bg-red-700 text-white py-1 px-0.5 rounded" onClick={() => deleteTodo(todo.id)}>삭제</button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-0.5 rounded" onClick={() => modifyCheck(todo.id, todo.isCompleted)}>수정</button>
+            <button className="bg-red-300 hover:bg-red-700 text-white py-1 px-0.5 rounded" data-testid="modify-button" onClick={() => deleteTodo(todo.id)}>삭제</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-0.5 rounded" data-testid="delete-button" onClick={() => modifyCheck(todo.id, todo.isCompleted)}>수정</button>
           </li>
         ))}
       </ul>

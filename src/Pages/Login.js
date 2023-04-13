@@ -90,7 +90,7 @@ export default function Login() {
           <div>
             
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to your account
+              로그인 하세요
             </h2>
             
           </div>
