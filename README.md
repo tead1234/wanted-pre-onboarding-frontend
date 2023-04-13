@@ -22,6 +22,9 @@
 ## 시연영상
 <img src = "https://user-images.githubusercontent.com/35370337/231791287-9a815029-0984-4f4c-b39c-99ceae01ae2c.gif">
 
+## 동영상 링크 
+https://drive.google.com/file/d/1uqnSzce5ayL0kF_Oujc5jdu5XISR0AWM/view?usp=sharing
+
 ## 기술 스택
 
 | JavaScript |   React  |  Node   |  Mobx   | Tailwind |
