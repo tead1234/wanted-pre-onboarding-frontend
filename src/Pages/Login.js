@@ -15,7 +15,7 @@ export default function Login() {
   // method
   const checkEmail = (e) => {
     //값이 숫자인지 검사하는 정규식
-    const regExp =/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const regExp =/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])+@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])/;
     if (regExp.test(e.target.value)) {
       inputRef.current.disabled = false;
       setEmailInfo(e.target.value);
@@ -64,7 +64,7 @@ export default function Login() {
           movePage('/todo');
       })
       .catch((Error) => {
-        console.log(Error);
+        alert("회원 정보가 잘못됐습니다. 이메일 비밀번호를 확인해주세요.")
         movePage('/signin');
       })
     
