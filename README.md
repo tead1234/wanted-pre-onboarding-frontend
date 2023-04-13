@@ -19,6 +19,9 @@
 ### 2. npm install
 ### 3. npm start run으로 실행
 
+## 시연영상
+<img src = "https://user-images.githubusercontent.com/35370337/231791287-9a815029-0984-4f4c-b39c-99ceae01ae2c.gif">
+
 ## 기술 스택
 
 | JavaScript |   React  |  Node   |  Mobx   | Tailwind |
