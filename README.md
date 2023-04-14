@@ -28,8 +28,7 @@ https://drive.google.com/file/d/1uqnSzce5ayL0kF_Oujc5jdu5XISR0AWM/view?usp=shari
 ## 기술 스택
 
 | JavaScript |   React  |  Node   |  Mobx   | Tailwind |
-| :--------: | :------: | :-----: | :-----: |:--------:|
-|   ![js]    | ![react] | ![node] | ![Mobx] |![Tailwind]|
+
 
 <br>
 
@@ -57,10 +56,5 @@ https://drive.google.com/file/d/1uqnSzce5ayL0kF_Oujc5jdu5XISR0AWM/view?usp=shari
 
 MIT &copy; [NoHack](mailto:lbjp114@gmail.com)
 
-<!-- Stack Icon Refernces -->
 
-[js]: /images/stack/javascript.svg
-[ts]: /images/stack/typescript.svg
-[react]: /images/stack/react.svg
-[node]: /images/stack/node.svg
 
